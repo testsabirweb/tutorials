@@ -2,19 +2,19 @@ package handlers
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/testsabirweb/tutorials/go/crud/mocks"
-	"github.com/testsabirweb/tutorials/go/crud/models"
+	"github.com/testsabirweb/tutorials/go/crud/pkg/mocks"
+	"github.com/testsabirweb/tutorials/go/crud/pkg/models"
 )
 
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
-	body, err := ioutil.ReadAll(r.Body)
+	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Fatalln(err)
 	}

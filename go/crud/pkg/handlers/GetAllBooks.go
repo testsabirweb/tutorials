@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"github.com/testsabirweb/tutorials/go/crud/mocks"
+	"github.com/testsabirweb/tutorials/go/crud/pkg/mocks"
 )
 
 func GetAllBooks(w http.ResponseWriter, r *http.Request) {

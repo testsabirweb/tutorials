@@ -1,6 +1,6 @@
 package mocks
 
-import "github.com/testsabirweb/tutorials/go/crud/models"
+import "github.com/testsabirweb/tutorials/go/crud/pkg/models"
 
 var Books = []models.Book{
 	{
