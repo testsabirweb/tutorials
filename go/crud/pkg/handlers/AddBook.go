@@ -2,16 +2,15 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"log"
-	"math/rand"
 	"net/http"
 
-	"github.com/testsabirweb/tutorials/go/crud/pkg/mocks"
 	"github.com/testsabirweb/tutorials/go/crud/pkg/models"
 )
 
-func AddBook(w http.ResponseWriter, r *http.Request) {
+func (h handler) AddBook(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -23,8 +22,10 @@ func AddBook(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatalln(err)
 	}
-	book.Id = rand.Intn(100)
-	mocks.Books = append(mocks.Books, book)
+	result := h.DB.Create(&book)
+	if result.Error != nil {
+		fmt.Println(result.Error)
+	}
 	w.WriteHeader(http.StatusCreated)
 	w.Header().Add("Content-Type", "application/json")
 	json.NewEncoder(w).Encode("Created!!!")

@@ -5,20 +5,24 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/testsabirweb/tutorials/go/crud/pkg/db"
 	"github.com/testsabirweb/tutorials/go/crud/pkg/handlers"
 )
 
 func main() {
 
+	DB := db.Init()
+	h := handlers.New(DB)
+
 	router := mux.NewRouter()
-	router.HandleFunc("/books", handlers.GetAllBooks).Methods(http.MethodGet)
-	router.HandleFunc("/book/{id}", handlers.GetBook).Methods(http.MethodGet)
+	router.HandleFunc("/books", h.GetAllBooks).Methods(http.MethodGet)
+	router.HandleFunc("/book/{id}", h.GetBook).Methods(http.MethodGet)
 
-	router.HandleFunc("/book", handlers.AddBook).Methods(http.MethodPost)
+	router.HandleFunc("/book", h.AddBook).Methods(http.MethodPost)
 
-	router.HandleFunc("/book/{id}", handlers.UpdateBook).Methods(http.MethodPut)
+	router.HandleFunc("/book/{id}", h.UpdateBook).Methods(http.MethodPut)
 
-	router.HandleFunc("/book/{id}", handlers.DeleteBook).Methods(http.MethodDelete)
+	router.HandleFunc("/book/{id}", h.DeleteBook).Methods(http.MethodDelete)
 
 	log.Println("Api is running")
 

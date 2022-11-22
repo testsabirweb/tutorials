@@ -2,15 +2,16 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
-	"github.com/testsabirweb/tutorials/go/crud/pkg/mocks"
+	"github.com/testsabirweb/tutorials/go/crud/pkg/models"
 )
 
-func DeleteBook(w http.ResponseWriter, r *http.Request) {
+func (h handler) DeleteBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	id, err := strconv.Atoi(vars["id"])
@@ -19,13 +20,16 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 		log.Fatalln(err)
 	}
 
-	for index, book := range mocks.Books {
-		if book.Id == id {
-			mocks.Books = append(mocks.Books[:index], mocks.Books[index+1:]...)
-			w.Header().Add("Content-Type", "application/json")
-			w.WriteHeader(http.StatusOK)
-			json.NewEncoder(w).Encode("Deleted")
-			break
-		}
+	var book models.Book
+	if result := h.DB.First(&book, id); result.Error != nil {
+		fmt.Println(result.Error)
 	}
+
+	if result := h.DB.Delete(&book); result.Error != nil {
+		fmt.Println(result.Error)
+	}
+
+	w.Header().Add("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("Deleted")
 }
